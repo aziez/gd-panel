@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
+import { hash } from "bcrypt";
+import client from "../../../../libs/prismadb";
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { username, email, password } = await request.json();
+    const hashPassword = await hash(password, 10);
 
-    console.log({ email, password }, "BERHASIL MASUK ROUTE");
+    const user = await client.user.create({
+      data: {
+        username: username,
+        email: email,
+        password: hashPassword,
+      },
+    });
+
+    console.log({ email, password, user }, "BERHASIL MASUK ROUTE");
   } catch (error) {
     console.log(error, "ERROR HANDLER");
   }

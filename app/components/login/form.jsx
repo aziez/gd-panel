@@ -1,16 +1,16 @@
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { signIn } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
 const schema = yup.object({
-  username: yup.string().required("username is required"),
   email: yup.string("Input valid email").required("Email is required"),
   password: yup.string().required("input the password"),
 });
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const {
     register,
     handleSubmit,
@@ -21,45 +21,15 @@ export default function RegisterForm() {
   });
 
   const onSubmit = async (data) => {
-    // e.preventDefault();
-    console.log(data);
-
-    try {
-      const response = await fetch(`/api/v1/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log({ response });
-    } catch (error) {
-      console.log("ERROR", error);
-    }
-
-    // Add your form submission logic here
+    signIn("credentials", {
+      email: data?.email,
+      password: data?.password,
+      //   redirect: false,
+    });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto my-8">
-      <div className="mb-4">
-        <label
-          htmlFor="username"
-          className="block text-gray-700 text-sm font-bold mb-2"
-        >
-          Username
-        </label>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          {...register("username", { required: true })}
-          className="w-full text-black px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-        />
-        <p className="text-red-500 text-xs italic">
-          {errors?.username?.message}
-        </p>
-      </div>
       <div className="mb-4">
         <label
           htmlFor="email"
@@ -99,7 +69,7 @@ export default function RegisterForm() {
           type="submit"
           className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
         >
-          Submit
+          Login
         </button>
       </div>
     </form>

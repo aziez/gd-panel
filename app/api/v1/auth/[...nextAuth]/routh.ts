@@ -5,10 +5,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
+import client from "../../../../libs/prismadb";
 
 const handler = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(client),
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -16,15 +17,9 @@ const handler = NextAuth({
         email: { label: "Email", type: "text", placholder: "Jhondoe@mail.com" },
         password: { label: "Password", type: "password" },
       },
-
       async authorize(credentials, req) {
-        const user = { id: "1", name: "Admin", email: "admin@mail.com" };
-
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
+        console.log({ credentials });
+        return null
       },
     }),
   ],
