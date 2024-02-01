@@ -26,8 +26,8 @@ export default function RegisterForm() {
     console.log(data);
 
     try {
-      const reisterUser = await axios
-        .post("/api/v1/auth/register", data)
+      await axios
+        .post("/api/auth/register", data)
         // .then(() => setData({ username: "", email: "", password: "" }))
         .then(() => console.log("Berhasil registrasi User"));
     } catch (error) {

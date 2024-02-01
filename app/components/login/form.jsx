@@ -1,6 +1,7 @@
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -21,12 +22,21 @@ export default function LoginForm() {
     resolver: yupResolver(schema),
   });
 
+  const router = useRouter();
+
   const onSubmit = async (data) => {
-    await signIn("credentials", {
+    const response = await signIn("credentials", {
       email: data?.email,
       password: data?.password,
       redirect: false,
     });
+
+    if (!response?.error) {
+      router.push("/");
+      router.refresh();
+    }
+
+    // console.log("Hasil Login : ", response);
   };
 
   return (
