@@ -1,5 +1,6 @@
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -25,17 +26,26 @@ export default function RegisterForm() {
     console.log(data);
 
     try {
-      const response = await fetch(`/api/v1/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      console.log({ response });
+      const reisterUser = await axios
+        .post("/api/v1/auth/register", data)
+        // .then(() => setData({ username: "", email: "", password: "" }))
+        .then(() => console.log("Berhasil registrasi User"));
     } catch (error) {
-      console.log("ERROR", error);
+      console.log(error, "ERROR CREATE USER");
     }
+
+    // try {
+    //   const response = await fetch(`/api/v1/auth/register`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //   });
+    //   console.log({ response });
+    // } catch (error) {
+    //   console.log("ERROR", error);
+    // }
 
     // Add your form submission logic here
   };

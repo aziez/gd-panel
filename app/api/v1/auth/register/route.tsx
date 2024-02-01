@@ -20,5 +20,5 @@ export async function POST(request: Request) {
     console.log(error, "ERROR HANDLER");
   }
 
-  return NextResponse.json({ message: "Succes Login" });
+  return NextResponse.json({ message: "Succes Create User" });
 }

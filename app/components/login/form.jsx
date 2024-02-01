@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+// import { signIn } from "next-auth/client";
 
 const schema = yup.object({
   email: yup.string("Input valid email").required("Email is required"),
@@ -21,10 +22,10 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data) => {
-    signIn("credentials", {
+    await signIn("credentials", {
       email: data?.email,
       password: data?.password,
-      //   redirect: false,
+      redirect: false,
     });
   };
 
