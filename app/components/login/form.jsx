@@ -36,7 +36,7 @@ export default function LoginForm() {
       router.refresh();
     }
 
-    // console.log("Hasil Login : ", response);
+    console.log("Hasil Login : ", response);
   };
 
   return (

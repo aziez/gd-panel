@@ -8,6 +8,7 @@ import { compare } from "bcrypt";
 // import client from "../../../../libs/prismadb";
 import client from "../../../libs/prismadb";
 import { error } from "console";
+import { NextRequest } from "next/server";
 
 const handler = NextAuth({
   adapter: PrismaAdapter(client),
@@ -38,7 +39,8 @@ const handler = NextAuth({
         );
 
         if (!credentials.email || !credentials.password) {
-          console.log("Please input email and password");
+          return NextRequest.json({ code: 401, message: "User Not Founds" });
+          // console.log("Please input email and password");
           // throw new Error("Please input email and password");
         }
 
@@ -48,29 +50,35 @@ const handler = NextAuth({
           },
         });
 
-        // console.log("DATA USERRR", user);
-
         const passwordCorrect = await compare(
           credentials?.password || "",
           user?.password
         );
 
-        // console.log("Password correct : ", passwordCorrect);
+        console.log("Password correct : ", passwordCorrect);
 
         if (!user || !user?.password) {
           // console.log("User Not Found");
-          throw new Error("User Not Found");
+          return NextRequest.json({
+            code: 400,
+            message: "User Not Founds",
+          });
+
+          // throw new Error("User Not Found");
         }
 
         if (passwordCorrect) {
-          // console.log("PASSSS");
+          console.log("PASSSS");
           return {
             id: user?.id,
             email: user?.email,
           };
+        } else {
+          return NextRequest.json({
+            code: 500,
+            message: "Unauthorized",
+          });
         }
-
-        return user;
       },
     }),
   ],
